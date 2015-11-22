@@ -1,72 +1,84 @@
 # ember-cli-deploy-ssh #
 
-You should already have ember-cli-deploy installed but if you dont:
+> WARNING: This plugin is only compatible with ember-cli-deploy versions >= 0.5.0
 
-```
-$ npm install --save-dev ember-cli-deploy
-```
+###Install
 
-**Install**
+You should already have `ember-cli-deploy` installed but if you don't:
 
-```
-$ npm install --save-dev ember-cli-deploy-ssh
+```sh
+$ ember install ember-cli-deploy
 ```
 
-In your `deploy.js `configuration, set `type` to `ssh` . Here's an example:
+You will also need `ember-cli-deploy-build`, to build your project on deploy.
+
+```sh
+$ ember install ember-cli-deploy-build
+```
+And finally install `ember-cli-deploy-ssh`
+```sh
+$ ember install ember-cli-deploy-ssh
+```
+
+Add the required configurations to  `deploy.js `:
 
 ```js
 // An example of deploy.js.
 
-var developmentEnvironment = {
-    // Omitted, see stagingEnvironment below.
-};
+module.exports = function(deployTarget) {
+  var ENV = {
+    build: {}
+    // include other plugin configuration that applies to all deploy targets here
+  };
 
-var stagingEnvironment = {
-  store: {
-    type: 'ssh', // the default store is 'redis', use 'ssh' for this addon.
-    remoteDir: process.env['APP_STAGING_REMOTE_DIR_PATH'],
-    host: process.env['APP_STAGING_REMOTE_HOST_IP'],
-    port: process.env['APP_STAGING_REMOTE_SSH_PORT'],
-    username: process.env['APP_STAGING_REMOTE_USERNAME'],
-    privateKeyFile: process.env['APP_STAGING_REMOTE_PRIVATE_KEY']
-  },
-  assets: {
-    /* Handle your assets here. I recommmend using 'ember-cli-deploy-s3' */
+  if (deployTarget === 'development') {
+    ENV.build.environment = 'development';
+
+    ENV.plugins = ['build', 'ssh'];
+
+    ENV.ssh = {
+      remoteDir: process.env.REMOTE_DIR_PATH,
+      userName: process.env.REMOTE_USERNAME,
+      host: process.env.REMOTE_HOST_IP,
+      password: process.env.REMOTE_PASSWORD,
+      port: process.env.REMOTE_HOST_PORT
+    };
   }
-};
 
-var productionEnvironment = {
-    // Omitted, see stagingEnvironment above.
-};
+  if (deployTarget === 'staging') {
+    ENV.build.environment = 'production';
+  }
 
-module.exports = {
-  development: developmentEnvironment,
-  staging: stagingEnvironment,
-  production: productionEnvironment
-};
+  if (deployTarget === 'production') {
+    ENV.build.environment = 'production';
+  }
 
+  return ENV;
+};
 ```
 
-**SSH Configuration**
+## Configurations
 
-The following parameters are available to setup correctly ssh:
+The following parameters are available to correctly setup ssh:
 
 * **host** - Hostname or IP address of the server (**required**)
 * **username** - Username for authentication (**required**)
-* **port** - Port of the server (**optional**)
+* **remoteDir** Remote directory to upload to (**required**)
+* **password** - Password for authentication (**optional**)
+* **port** - Port of the server, defaults to 22 (**optional**)
 * **privateKeyFile** - String that contains a private key for either key-based or hostbased user authentication (**optional**)
 * **passphrase** - Passphrase used to decrypt private key, if needed (**optional**)
 * **agent** - Path to ssh-agent's UNIX socket for ssh-agent-based user authentication (**optional**)
 
 
-## Directory Structure ##
+## Directory Structure
 
-The following directory structure is created on your server. The basic gist is that your revisions will be stored inside of their own directory along with meta data about the revision (date of commit, commit message, author of the commit, and commit hash). Information about your revisions is viewable via the following command `ember deploy:list -e <your environment>`.
+The following directory structure is created on your server. The basic gist is that your revisions will be stored inside of their own directory along with meta data about the revision (date of commit, commit message, author of the commit, and commit hash). Information about your revisions is viewable via the following command `ember deploy:list <your environment>`.
 
-**List revisions**
+### List revisions
 
 ```sh
-$ ember deploy:list -e staging
+$ ember deploy:list staging
 ```
 
 ```sh
@@ -90,10 +102,10 @@ The following revisions were found:
 
 ```
 
-**Deploy revision**
+### Deploy revision
 
 ```sh
-$ ember deploy -e staging
+$ ember deploy staging
 ```
 
 ```
@@ -110,11 +122,12 @@ index.html --> abc123/index.html  # Active symlink
 
 ```
 
-**Activate revision**
+### Activate revision
 
 ```sh
-$ ember deploy:activate -e staging -r <revisionId>
+$ ember deploy:activate staging --revision=<revisionId>
 ```
 
-
-> This project is based on this repo: https://github.com/treyhunner/ember-deploy-ssh-index. Though, it's been heavily modified to serve a different purpose -credit where credit is due.
+> This project was adapted from these repos:
+ https://github.com/treyhunner/ember-deploy-ssh-index
+ https://github.com/eddflrs/ember-cli-deploy-ssh
