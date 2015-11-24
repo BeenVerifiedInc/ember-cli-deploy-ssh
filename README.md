@@ -65,11 +65,19 @@ module.exports = function(deployTarget) {
 };
 ```
 
-Make sure you specify all installed plugins for each of your environments.
+Make sure you specify all your plugins in each of your environments.
 
 ```sh
   ENV.plugins = ['build', 'ssh', 'revision-data'];
 ```
+
+## dotENV Support
+
+`ember-cli-deploy` supports `.env` files out of the box. In order to employ this functionality, simply create the following files and add your variables to them.
+
+* `.env.deploy.development`
+* `.env.deploy.production`
+* `.env.deploy.staging`
 
 ## Configurations
 
