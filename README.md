@@ -15,7 +15,15 @@ You will also need `ember-cli-deploy-build`, to build your project on deploy.
 ```sh
 $ ember install ember-cli-deploy-build
 ```
+
+and  `ember-cli-deploy-revision-data`
+
+```sh
+$ ember install ember-cli-deploy-revision-data
+```
+
 And finally install `ember-cli-deploy-ssh`
+
 ```sh
 $ ember install ember-cli-deploy-ssh
 ```
