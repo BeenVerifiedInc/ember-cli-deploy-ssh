@@ -25,7 +25,13 @@ module.exports = {
         },
 
         revisionKey: function(context) {
-          return context.commandOptions.revision || (context.revisionData && context.revisionData.revisionKey);
+          var key = context.commandOptions.revision || (context.revisionData && context.revisionData.revisionKey);
+
+          if (key.length > 7) {
+            key = key.slice(0, 7);
+          }
+
+          return key;
         },
 
         client: function(context) {
