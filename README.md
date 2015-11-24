@@ -42,7 +42,7 @@ module.exports = function(deployTarget) {
   if (deployTarget === 'development') {
     ENV.build.environment = 'development';
 
-    ENV.plugins = ['build', 'ssh'];
+    ENV.plugins = ['build', 'ssh', 'revision-data'];
 
     ENV.ssh = {
       remoteDir: process.env.REMOTE_DIR_PATH,
@@ -63,6 +63,12 @@ module.exports = function(deployTarget) {
 
   return ENV;
 };
+```
+
+Make sure you specify all installed plugins for each of your environments.
+
+```sh
+  ENV.plugins = ['build', 'ssh', 'revision-data'];
 ```
 
 ## Configurations
@@ -117,6 +123,10 @@ The following revisions were found:
 ```sh
 $ ember deploy staging
 ```
+You can also add these optional flags:
+
+  * `--activate` triggers the activation passing the revision that just got uploaded.
+  * `--summary` adds a summary message to the deployMetaData (used in slack).
 
 ```
 # In your server's file directory...
