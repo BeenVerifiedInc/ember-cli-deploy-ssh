@@ -16,10 +16,6 @@ module.exports = {
       defaultConfig: {
         port: '22',
         filePattern: 'index.html',
-        summary: function(context) {
-          return context.commandOptions.summary || 'Just another freshness deploy!';
-        },
-
         distDir: function(context) {
           return context.distDir;
         },
@@ -49,11 +45,6 @@ module.exports = {
 
       upload: function(context) {
         return context.adapter.upload.call(this, context)
-          .catch(this.errorMessage.bind(this));
-      },
-
-      didUpload: function(context) {
-        return context.adapter.didUpload.call(this, context)
           .catch(this.errorMessage.bind(this));
       },
 
