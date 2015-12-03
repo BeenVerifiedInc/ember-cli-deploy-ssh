@@ -156,6 +156,35 @@ index.html --> abc123/index.html  # Active symlink
 $ ember deploy:activate staging --revision=<revisionId>
 ```
 
+### Testing with Docker
+
+Download docker image.
+
+```sh
+$ docker pull fedora/ssh
+```
+
+Start a new container.
+
+```sh
+$ docker run --name ssh -d -p 2200:22 fedora/ssh
+```
+
+Get the password.
+
+```sh
+$ docker logs ssh | grep 'ssh user password'
+```
+
+Add the password to your `.env` file and you are good to go.
+
+You can also ssh into the machine with: 
+
+```sh
+$ ssh -p 2200 user@$(docker-machine ip dev)
+
+```
+
 > This project was adapted from these repos:
  * https://github.com/treyhunner/ember-deploy-ssh-index
  * https://github.com/eddflrs/ember-cli-deploy-ssh
