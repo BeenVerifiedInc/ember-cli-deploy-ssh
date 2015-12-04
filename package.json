@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-deploy-ssh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Deploy your Ember revisions via ssh.",
   "directories": {
     "doc": "doc",
