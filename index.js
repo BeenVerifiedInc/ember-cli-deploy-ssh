@@ -48,6 +48,14 @@ module.exports = {
           .catch(this.errorMessage.bind(this));
       },
 
+      fetchInitialRevisions: function(context) {
+        return this.fetchRevisions(context)
+          .then(function(revisionData) {
+            return { revisionData: { initial: revisionData.revisions } };
+          })
+          .catch(this.errorMessage.bind(this));
+      },
+
       fetchRevisions: function(context) {
         return context.adapter.fetchRevisions.call(this, context)
           .catch(this.errorMessage.bind(this));
